@@ -13,6 +13,6 @@ function cdp
         end
         set current_dir (dirname $current_dir)
     end
-    echo "No .git directory found."
+    echo "No .git directory found." >&2
     return 1
 end
