@@ -14,17 +14,21 @@ function find_nearest
     return 1
 end
 
-function update_project_bin_path --on-event fish_prompt
+function update_project_bin_path # --on-event fish_prompt
     # Initialize default_path if not set
-    if not set -q default_path
-        set -g default_path $PATH
+    set temp_path ""
+
+    for i in $PATH
+        if not string match -q -- "*vendor/bin" "$i"
+            if not string match -q -- "*node_modules/.bin" "$i"
+                set temp_path "$temp_path $i"
+            end
+        end
     end
 
     set -l nearest_vendor_bin (find_nearest "vendor/bin")
     set -l nearest_node_bin (find_nearest "node_modules/.bin")
     
-    set -l temp_path $default_path
-
     if test -n "$nearest_vendor_bin"
         set temp_path $nearest_vendor_bin $temp_path
     end
