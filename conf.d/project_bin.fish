@@ -15,7 +15,6 @@ function find_nearest
 end
 
 function update_project_bin_path # --on-event fish_prompt
-    # Initialize default_path if not set
     set temp_path ""
 
     for i in $PATH
