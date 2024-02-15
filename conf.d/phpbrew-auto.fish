@@ -1,4 +1,8 @@
 function phpbrew-auto --on-variable PWD
+    if not type -q phpbrew
+        return 0
+    end
+
     if test ! -f composer.json
         return 0
     end 
@@ -17,7 +21,7 @@ function phpbrew-auto --on-variable PWD
     set target_version (echo $target_version | cut -d' ' -f 1)
 
     if test -z "$target_version"
-      return 0
+        return 0
     end
 
     set current_version (phpbrew use | grep -wo -E '[0-9].+')
