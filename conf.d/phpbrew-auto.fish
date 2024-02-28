@@ -1,24 +1,17 @@
 function phpbrew-auto --on-variable PWD
-    if not type -q phpbrew
-        return 0
-    end
-
     if test ! -f composer.json
         return 0
     end 
 
-    set php_version (jq -r '.require.php' composer.json)
+    set php_semver (jq -r '.require.php' composer.json)
 
-    if test -z "$php_version"
+    if test -z "$php_semver"
         return 0
     end
 
-    set php_version_simple (echo $php_version | grep -wo -E '[0-9].*')
+    set installed_versions (phpbrew list | grep -woE '[0-9.]+')
 
-    set installed_versions (phpbrew list | string match -r '\b([0-9]+\.[0-9]+\.[0-9]+)' | grep -v php-)
-
-    set target_version (echo $installed_versions | grep -wo -E "$php_version_simple"'[^ ]*')
-    set target_version (echo $target_version | cut -d' ' -f 1)
+    set target_version (semver -r "$php_semver" $installed_versions | head -n 1)
 
     if test -z "$target_version"
         return 0
