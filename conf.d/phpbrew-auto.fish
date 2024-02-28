@@ -17,7 +17,7 @@ function phpbrew-auto --on-variable PWD
         return 0
     end
 
-    set current_version (phpbrew use | grep -wo -E '[0-9].+')
+    set current_version (phpbrew use | grep -woE '[0-9.]+')
 
     if test "$target_version" = "$current_version"
         return 0
